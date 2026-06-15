@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "GitHubClient"
 include(":app")
 include(":domain")
+include(":data")
