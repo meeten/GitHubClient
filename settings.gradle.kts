@@ -7,6 +7,10 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven {
+            url = uri("https://redirector.kotlinlang.org/maven/dev")
+            url = uri("https://redirector.kotlinlang.org/maven/ktor-eap")
+        }
         mavenCentral()
         gradlePluginPortal()
     }
