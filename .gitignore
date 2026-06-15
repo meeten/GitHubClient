@@ -1,15 +1,26 @@
+# Built development files
+build/
+bin/
+gen/
+out/
+
+# Android Studio / IntelliJ IDEA
+.idea/
 *.iml
-.gradle
+*.ipr
+*.iws
+.gradle/
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+capture/
+memory.png
+
+# Gradle features
+.kotlin/
+.kotlinbuild/
+
+# Log files
+*.log
+
+# OS generated files
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+Thumbs.db
