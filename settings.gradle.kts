@@ -27,3 +27,7 @@ rootProject.name = "GitHubClient"
 include(":app")
 include(":domain")
 include(":data")
+include(":feature")
+include(":feature:authorization")
+include(":core")
+include(":core:designsystem")
