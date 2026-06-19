@@ -3,13 +3,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.example.storage"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
         minSdk = 26
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -29,16 +31,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:storage"))
-    implementation(project(":domain"))
 
     //koin
     implementation(libs.koin.android)
-
-    //ktor
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.client.logging)
+    implementation(libs.koin.androidx.compose)
 }

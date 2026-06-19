@@ -4,5 +4,5 @@ import com.example.domain.model.OperationResult
 
 interface GitHubRepository {
 
-    suspend fun checkAuth(token: String): OperationResult<Unit>
+    suspend fun loginWithToken(token: String): OperationResult<Unit>
 }

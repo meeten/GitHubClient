@@ -8,6 +8,6 @@ class ValidateTokenUseCase(
 ) {
 
     suspend operator fun invoke(token: String): OperationResult<Unit> {
-        return repository.checkAuth(token)
+        return repository.loginWithToken(token)
     }
 }

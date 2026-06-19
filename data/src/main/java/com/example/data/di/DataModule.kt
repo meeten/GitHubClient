@@ -8,5 +8,10 @@ import org.koin.dsl.module
 val dataModule = module {
     single { GitHubRemoteDataSource(networkClient = get()) }
 
-    single<GitHubRepository> { GitHubRepositoryImpl(remoteDataSource = get()) }
+    single<GitHubRepository> {
+        GitHubRepositoryImpl(
+            remoteDataSource = get(),
+            tokenManager = get()
+        )
+    }
 }

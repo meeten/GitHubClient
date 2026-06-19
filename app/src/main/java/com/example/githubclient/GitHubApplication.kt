@@ -4,6 +4,8 @@ import android.app.Application
 import com.example.authorization.di.authFeatureModule
 import com.example.data.di.dataModule
 import com.example.domain.di.domainModule
+import com.example.githubclient.di.mainModule
+import com.example.storage.storageModule
 import networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -21,8 +23,10 @@ class GitHubApplication : Application() {
 
             modules(
                 networkModule,
+                storageModule,
                 dataModule,
                 domainModule,
+                mainModule,
                 authFeatureModule
             )
         }
