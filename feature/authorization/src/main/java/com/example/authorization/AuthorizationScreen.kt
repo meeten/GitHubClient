@@ -1,7 +1,6 @@
 package com.example.authorization
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -27,8 +26,17 @@ fun AuthorizationScreen(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val token by viewModel.token.collectAsState()
+
+    val stateValue = uiState
+    val isLoading = stateValue is AuthorizationViewModel.State.Loading
+
+    val errorReason = if (stateValue is AuthorizationViewModel.State.InvalidInput) {
+        stateValue.reasonUiText.asString(context)
+    } else {
+        ""
+    }
 
     LaunchedEffect(viewModel.actions) {
         viewModel.actions.collectLatest { action ->
@@ -60,37 +68,16 @@ fun AuthorizationScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        AuthorizationContent(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .imePadding()
-        ) {
-            when (val currentState = uiState.value) {
-                AuthorizationViewModel.State.Idle -> {
-                    AuthorizationContent(
-                        token = token,
-                        onChangeToken = { viewModel.token.value = it },
-                        onSignButtonPressed = viewModel::onSignButtonPressed
-                    )
-                }
-
-                AuthorizationViewModel.State.Loading -> {
-                    AuthorizationContent(
-                        token = token,
-                        isLoading = true
-                    )
-                }
-
-                is AuthorizationViewModel.State.InvalidInput -> {
-                    AuthorizationContent(
-                        token = token,
-                        errorReason = currentState.reasonUiText.asString(),
-                        onChangeToken = { viewModel.token.value = it },
-                        onSignButtonPressed = viewModel::onSignButtonPressed
-                    )
-                }
-            }
-        }
+                .imePadding(),
+            token = token,
+            isLoading = isLoading,
+            errorReason = errorReason,
+            onChangeToken = viewModel::onTokenChanged,
+            onSignButtonPressed = viewModel::onSignButtonPressed
+        )
     }
 }

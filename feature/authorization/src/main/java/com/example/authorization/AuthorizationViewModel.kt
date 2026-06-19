@@ -16,7 +16,8 @@ class AuthorizationViewModel(
     private val validateTokenUseCase: ValidateTokenUseCase
 ) : ViewModel() {
 
-    val token = MutableStateFlow("")
+    private val _token = MutableStateFlow("")
+    val token = _token.asStateFlow()
 
     private val _uiState = MutableStateFlow<State>(State.Idle)
     val uiState = _uiState.asStateFlow()
@@ -24,10 +25,14 @@ class AuthorizationViewModel(
     private val _actions = Channel<Action>()
     val actions = _actions.receiveAsFlow()
 
+    fun onTokenChanged(newToken: String) {
+        _token.value = newToken
+    }
+
     fun onSignButtonPressed() {
         _uiState.value = State.Loading
 
-        val currentToken = token.value
+        val currentToken = _token.value
 
         if (currentToken.isBlank()) {
             _uiState.value = State.InvalidInput(
