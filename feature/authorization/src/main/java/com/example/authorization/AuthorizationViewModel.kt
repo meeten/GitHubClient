@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.extension.onFailure
 import com.example.domain.model.OperationResult
 import com.example.domain.usecase.ValidateTokenUseCase
+import com.example.ui.UiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +29,13 @@ class AuthorizationViewModel(
 
         val currentToken = token.value
 
+        if (currentToken.isBlank()) {
+            _uiState.value = State.InvalidInput(
+                reasonUiText = UiText.StringResource(resId = R.string.invalid_token)
+            )
+            return
+        }
+
         viewModelScope.launch {
             validateToken(currentToken)
         }
@@ -43,15 +51,26 @@ class AuthorizationViewModel(
             is OperationResult.Failure -> {
                 result.onFailure(
                     onInvalidToken = {
-                        _uiState.value = State.InvalidInput(reason = "Invalid token")
+                        _uiState.value =
+                            State.InvalidInput(
+                                reasonUiText = UiText.StringResource(resId = R.string.invalid_token)
+                            )
                     },
                     onNetworkError = {
                         _uiState.value = State.Idle
-                        _actions.send(Action.ShowError(message = "Network error"))
+                        _actions.send(
+                            Action.ShowError(
+                                messageUiText = UiText.StringResource(resId = R.string.network_error)
+                            )
+                        )
                     },
                     onUnknownError = {
                         _uiState.value = State.Idle
-                        _actions.send(Action.ShowError(message = it))
+                        _actions.send(
+                            Action.ShowError(
+                                messageUiText = UiText.DynamicString(value = it)
+                            )
+                        )
                     },
                 )
             }
@@ -62,12 +81,12 @@ class AuthorizationViewModel(
 
         object Idle : State
         object Loading : State
-        data class InvalidInput(val reason: String) : State
+        data class InvalidInput(val reasonUiText: UiText) : State
     }
 
     sealed interface Action {
 
         object RouteToMain : Action
-        data class ShowError(val message: String) : Action
+        data class ShowError(val messageUiText: UiText) : Action
     }
 }
