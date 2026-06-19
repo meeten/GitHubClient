@@ -7,6 +7,10 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven {
+            url = uri("https://redirector.kotlinlang.org/maven/dev")
+            url = uri("https://redirector.kotlinlang.org/maven/ktor-eap")
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -21,3 +25,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "GitHubClient"
 include(":app")
+include(":domain")
+include(":data")
+include(":feature")
+include(":feature:authorization")
+include(":core")
+include(":core:designsystem")
+include(":core:ui")
+include(":core:storage")
