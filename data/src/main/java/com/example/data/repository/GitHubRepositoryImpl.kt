@@ -12,12 +12,15 @@ class GitHubRepositoryImpl(
 
     override suspend fun loginWithToken(token: String): OperationResult<Unit> {
         return remoteDataSource.checkAuth(token).also {
-            it.saveToken(token)
+            saveToken(token = token, operationResult = it)
         }
     }
 
-    private fun OperationResult<Unit>.saveToken(token: String) {
-        when (this) {
+    private fun saveToken(
+        token: String,
+        operationResult: OperationResult<Unit>,
+    ) {
+        when (operationResult) {
             is OperationResult.Success<Unit> -> {
                 tokenManager.saveToken(token)
             }
