@@ -29,15 +29,6 @@ fun AuthorizationScreen(
     val uiState by viewModel.uiState.collectAsState()
     val token by viewModel.token.collectAsState()
 
-    val stateValue = uiState
-    val isLoading = stateValue is AuthorizationViewModel.State.Loading
-
-    val errorReason = if (stateValue is AuthorizationViewModel.State.InvalidInput) {
-        stateValue.reasonUiText.asString(context)
-    } else {
-        ""
-    }
-
     LaunchedEffect(viewModel.actions) {
         viewModel.actions.collectLatest { action ->
             when (action) {
@@ -74,8 +65,8 @@ fun AuthorizationScreen(
                 .padding(paddingValues)
                 .imePadding(),
             token = token,
-            isLoading = isLoading,
-            errorReason = errorReason,
+            isLoading = uiState.isLoading,
+            errorReason = uiState.getError(context),
             onChangeToken = viewModel::onTokenChanged,
             onSignButtonPressed = viewModel::onSignButtonPressed
         )

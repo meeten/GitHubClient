@@ -1,5 +1,6 @@
 package com.example.authorization
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.extension.onFailure
@@ -83,10 +84,16 @@ class AuthorizationViewModel(
     }
 
     sealed interface State {
+        val isLoading: Boolean get() = false
+        fun getError(context: Context): String = ""
 
         object Idle : State
-        object Loading : State
-        data class InvalidInput(val reasonUiText: UiText) : State
+        object Loading : State {
+            override val isLoading = true
+        }
+        data class InvalidInput(val reasonUiText: UiText) : State {
+            override fun getError(context: Context) = reasonUiText.asString(context)
+        }
     }
 
     sealed interface Action {
