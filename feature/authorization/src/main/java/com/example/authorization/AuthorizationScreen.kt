@@ -1,6 +1,5 @@
 package com.example.authorization
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AuthorizationScreen(
     modifier: Modifier = Modifier,
-    viewModel: AuthorizationViewModel = koinViewModel()
+    viewModel: AuthorizationViewModel = koinViewModel(),
+    onAuthorized: () -> Unit
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -32,8 +32,8 @@ fun AuthorizationScreen(
     LaunchedEffect(viewModel.actions) {
         viewModel.actions.collectLatest { action ->
             when (action) {
-                is AuthorizationViewModel.Action.RouteToMain -> {
-                    Log.d("AuthorizationScreen", "RouteToMain")
+                AuthorizationViewModel.Action.Authorized -> {
+                    onAuthorized()
                 }
 
                 // TODO: Заменить Snackbar на AlertDialog в соответствии с дизайн-макетом

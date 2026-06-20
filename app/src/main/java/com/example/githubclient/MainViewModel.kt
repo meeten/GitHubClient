@@ -1,24 +1,19 @@
 package com.example.githubclient
 
 import androidx.lifecycle.ViewModel
+import com.example.githubclient.navigation.Screen
 import com.example.storage.TokenManager
 
 class MainViewModel(
-    tokenManager: TokenManager
+    private val tokenManager: TokenManager
 ) : ViewModel() {
 
-    private val hasToken = tokenManager.getToken()
+    fun getStartDestination(): String {
+        val token = tokenManager.getToken()
 
-    val action = if (hasToken == null) {
-        Action.RouteAuthorization
-    } else {
-        Action.RouteToHome
-    }
-
-
-    sealed interface Action {
-
-        object RouteAuthorization : Action
-        object RouteToHome : Action
+        return when (token) {
+            null ->  Screen.Authorization.route
+            else -> Screen.Home.route
+        }
     }
 }

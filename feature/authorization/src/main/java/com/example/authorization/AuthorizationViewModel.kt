@@ -51,7 +51,7 @@ class AuthorizationViewModel(
         when (val result = validateTokenUseCase(token)) {
             is OperationResult.Success -> {
                 _uiState.value = State.Idle
-                _actions.send(Action.RouteToMain)
+                _actions.send(Action.Authorized)
             }
 
             is OperationResult.Failure -> {
@@ -91,6 +91,7 @@ class AuthorizationViewModel(
         object Loading : State {
             override val isLoading = true
         }
+
         data class InvalidInput(val reasonUiText: UiText) : State {
             override fun getError(context: Context) = reasonUiText.asString(context)
         }
@@ -98,7 +99,7 @@ class AuthorizationViewModel(
 
     sealed interface Action {
 
-        object RouteToMain : Action
+        object Authorized : Action
         data class ShowError(val messageUiText: UiText) : Action
     }
 }
