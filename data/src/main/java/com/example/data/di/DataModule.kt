@@ -6,7 +6,12 @@ import com.example.domain.repository.GitHubRepository
 import org.koin.dsl.module
 
 val dataModule = module {
-    single { GitHubRemoteDataSource(networkClient = get()) }
+    single {
+        GitHubRemoteDataSource(
+            networkClient = get(),
+            mapper = get()
+        )
+    }
 
     single<GitHubRepository> {
         GitHubRepositoryImpl(

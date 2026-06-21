@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.example.data.network.GitHubRemoteDataSource
 import com.example.domain.model.OperationResult
+import com.example.domain.model.Repo
 import com.example.domain.repository.GitHubRepository
 import com.example.storage.TokenManager
 
@@ -14,6 +15,11 @@ class GitHubRepositoryImpl(
         return remoteDataSource.checkAuth(token).also {
             saveToken(token = token, operationResult = it)
         }
+    }
+
+    override suspend fun getRepos(): OperationResult<List<Repo>> {
+        val token = tokenManager.getToken() ?: return OperationResult.Failure.InvalidToken
+        return remoteDataSource.getRepos(token)
     }
 
     private fun saveToken(
