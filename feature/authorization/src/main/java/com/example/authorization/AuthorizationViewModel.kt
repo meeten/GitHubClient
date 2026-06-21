@@ -66,7 +66,7 @@ class AuthorizationViewModel(
                         _uiState.value = State.Idle
                         _actions.send(
                             Action.ShowError(
-                                messageUiText = UiText.StringResource(resId = R.string.network_error)
+                                messageUiText = UiText.StringResource(resId = com.example.ui.R.string.network_error)
                             )
                         )
                     },
