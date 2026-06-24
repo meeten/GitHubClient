@@ -8,4 +8,6 @@ interface GitHubRepository {
     suspend fun loginWithToken(token: String): OperationResult<Unit>
 
     suspend fun getRepos(): OperationResult<List<Repo>>
+
+    suspend fun getRepo(id: Int): OperationResult<Repo>
 }
