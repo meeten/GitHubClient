@@ -5,6 +5,7 @@ import com.example.authorization.di.authFeatureModule
 import com.example.data.di.dataModule
 import com.example.domain.di.domainModule
 import com.example.githubclient.di.mainModule
+import com.example.home.di.homeFeatureModule
 import com.example.storage.storageModule
 import networkModule
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +28,8 @@ class GitHubApplication : Application() {
                 dataModule,
                 domainModule,
                 mainModule,
-                authFeatureModule
+                authFeatureModule,
+                homeFeatureModule
             )
         }
     }

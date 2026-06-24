@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":feature:authorization"))
+    implementation(project(":feature:home"))
 
     //koin
     implementation(libs.koin.android)
