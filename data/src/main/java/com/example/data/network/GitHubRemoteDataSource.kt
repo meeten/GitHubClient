@@ -41,7 +41,7 @@ class GitHubRemoteDataSource(
             },
             transform = { response ->
                 val reposDto = response.body<List<RepoDto>>()
-                mapper.responseToRepos(reposDto)
+                mapper.mapResponseToRepos(reposDto)
             }
         )
     }

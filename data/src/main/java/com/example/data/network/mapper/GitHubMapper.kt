@@ -5,7 +5,7 @@ import com.example.domain.model.Repo
 
 class GitHubMapper {
 
-    fun responseToRepos(response: List<RepoDto>): List<Repo> {
+    fun mapResponseToRepos(response: List<RepoDto>): List<Repo> {
         return response.map { repoDto ->
             Repo(
                 id = repoDto.id,
