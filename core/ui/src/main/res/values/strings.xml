@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="network_error">Network error</string>
+    <string name="repositories">Repositories</string>
+    <string name="check_your_something">Check your something</string>
+    <string name="no_repositories_at_the_moment">No repositories at the moment</string>
+    <string name="empty">Empty</string>
+    <string name="refresh">REFRESH</string>
+    <string name="connection_error">Connection error</string>
+    <string name="check_your_internet_connection">Check your internet connection</string>
+    <string name="retry">RETRY</string>
+    <string name="something_error">Something error</string>
+</resources>

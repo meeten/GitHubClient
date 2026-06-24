@@ -27,9 +27,13 @@ val networkModule = module {
             }
 
             defaultRequest {
-                url("https://api.github.com/")
-                header("X-GitHub-Api-Version", "2022-11-28")
+                url(BASE_URL)
+                header(KEY_API_VERSION, VALUE_API_VERSION)
             }
         }
     }
 }
+
+private const val BASE_URL = "https://api.github.com/"
+private const val KEY_API_VERSION = "X-GitHub-Api-Version"
+private const val VALUE_API_VERSION = "2022-11-28"

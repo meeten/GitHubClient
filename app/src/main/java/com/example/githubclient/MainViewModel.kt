@@ -12,8 +12,13 @@ class MainViewModel(
         val token = tokenManager.getToken()
 
         return when (token) {
-            null ->  Screen.Authorization.route
+            null -> Screen.Authorization.route
             else -> Screen.Home.route
         }
+    }
+
+    fun onLogoutButtonPressed(): String {
+        tokenManager.clearToken()
+        return Screen.Authorization.route
     }
 }
