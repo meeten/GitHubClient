@@ -3,6 +3,7 @@ package com.example.data.repository
 import com.example.data.network.GitHubRemoteDataSource
 import com.example.domain.model.OperationResult
 import com.example.domain.model.Repo
+import com.example.domain.model.RepoDetails
 import com.example.domain.repository.GitHubRepository
 import com.example.storage.TokenManager
 
@@ -11,6 +12,8 @@ class GitHubRepositoryImpl(
     private val tokenManager: TokenManager
 ) : GitHubRepository {
 
+    private var token: String = tokenManager.getToken() ?: ""
+
     override suspend fun loginWithToken(token: String): OperationResult<Unit> {
         return remoteDataSource.checkAuth(token).also {
             saveToken(token = token, operationResult = it)
@@ -18,8 +21,22 @@ class GitHubRepositoryImpl(
     }
 
     override suspend fun getRepos(): OperationResult<List<Repo>> {
-        val token = tokenManager.getToken() ?: return OperationResult.Failure.InvalidToken
         return remoteDataSource.getRepos(token)
+    }
+
+    override suspend fun getRepo(id: Int): OperationResult<RepoDetails> {
+        return remoteDataSource.getRepo(token = token, repoId = id)
+    }
+
+    override suspend fun getRepositoryReadme(
+        ownerName: String,
+        repositoryName: String
+    ): OperationResult<String> {
+        return remoteDataSource.getRepositoryReadme(
+            token = token,
+            ownerName = ownerName,
+            repositoryName = repositoryName
+        )
     }
 
     private fun saveToken(

@@ -1,4 +1,4 @@
-package com.example.home.ui.placeholder
+package com.example.ui.placeholder
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
