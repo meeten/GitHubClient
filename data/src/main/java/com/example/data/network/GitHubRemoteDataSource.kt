@@ -2,6 +2,7 @@ package com.example.data.network
 
 import com.example.data.extension.safeNetworkCall
 import com.example.data.network.mapper.GitHubMapper
+import com.example.data.network.model.ReadmeDto
 import com.example.data.network.model.RepoDetailsDto
 import com.example.data.network.model.RepoDto
 import com.example.domain.model.OperationResult
@@ -21,13 +22,11 @@ class GitHubRemoteDataSource(
     suspend fun checkAuth(token: String): OperationResult<Unit> {
         return safeNetworkCall(
             call = {
-                networkClient.get("octocat") {
-                    headers {
-                        append(name = HttpHeaders.Authorization, value = "token $token")
-                    }
+                networkClient.get("user") {
+                    settingHeaders(token)
                 }
             },
-            transform = { }
+            transform = {}
         )
     }
 
@@ -56,6 +55,24 @@ class GitHubRemoteDataSource(
                 val repoDetailsDto = it.body<RepoDetailsDto>()
                 mapper.mapResponseToRepoDetails(repoDetailsDto)
             }
+        )
+    }
+
+    suspend fun getRepositoryReadme(
+        token: String,
+        ownerName: String,
+        repositoryName: String
+    ): OperationResult<String> {
+        return safeNetworkCall(
+            call = {
+                networkClient.get("repos/$ownerName/$repositoryName/readme") {
+                    settingHeaders(token)
+                }
+            },
+            transform = {
+                val readmeDto = it.body<ReadmeDto>()
+                readmeDto.content
+            },
         )
     }
 

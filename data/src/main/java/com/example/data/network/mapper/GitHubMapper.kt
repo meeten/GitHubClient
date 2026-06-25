@@ -25,6 +25,8 @@ class GitHubMapper {
     fun mapResponseToRepoDetails(response: RepoDetailsDto): RepoDetails {
         return RepoDetails(
             id = response.id,
+            ownerName = response.owner.login,
+            repoName = response.name,
             url = response.url,
             licenseName = response.license.name,
             stars = response.stars,

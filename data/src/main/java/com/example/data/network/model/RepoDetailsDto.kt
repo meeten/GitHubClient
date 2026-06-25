@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RepoDetailsDto(
     @SerialName("id") val id: Int,
-    @SerialName("name") val name:String,
+    @SerialName("owner") val owner: OwnerDto,
+    @SerialName("name") val name: String,
     @SerialName("html_url") val url: String,
     @SerialName("license") val license: LicenseDto,
     @SerialName("stargazers_count") val stars: Int,

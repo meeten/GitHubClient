@@ -28,6 +28,17 @@ class GitHubRepositoryImpl(
         return remoteDataSource.getRepo(token = token, repoId = id)
     }
 
+    override suspend fun getRepositoryReadme(
+        ownerName: String,
+        repositoryName: String
+    ): OperationResult<String> {
+        return remoteDataSource.getRepositoryReadme(
+            token = token,
+            ownerName = ownerName,
+            repositoryName = repositoryName
+        )
+    }
+
     private fun saveToken(
         token: String,
         operationResult: OperationResult<Unit>,
