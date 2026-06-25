@@ -11,4 +11,9 @@ interface GitHubRepository {
     suspend fun getRepos(): OperationResult<List<Repo>>
 
     suspend fun getRepo(id: Int): OperationResult<RepoDetails>
+
+    suspend fun getRepositoryReadme(
+        ownerName: String,
+        repositoryName: String
+    ): OperationResult<String>
 }
