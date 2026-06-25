@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.home.ui.placeholder.EmptyScreen
 import com.example.home.ui.HomeContent
 import com.example.ui.placeholder.ConnectionErrorScreen
-import com.example.home.ui.placeholder.UnknownErrorScreen
+import com.example.ui.placeholder.UnknownErrorScreen
 import com.example.ui.Loading
 import com.example.ui.R
 import com.example.ui.TopAppBarCustom
