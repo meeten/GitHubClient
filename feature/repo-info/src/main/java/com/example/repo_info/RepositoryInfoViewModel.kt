@@ -1,5 +1,6 @@
 package com.example.repo_info
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,20 +59,33 @@ class RepositoryInfoViewModel(
         savedStateHandle[KEY_REPO_ID] = id
     }
 
-    fun onRetryButtonPressed(){
-
+    fun onRetryButtonPressed() {
+        savedStateHandle[KEY_REPO_ID] = savedStateHandle.get<Int>(KEY_REPO_ID)
     }
 
     private fun OperationResult.Failure.toUiText(): UiText = when (this) {
         is OperationResult.Failure.NetworkError -> UiText.StringResource(R.string.network_error)
-        else -> UiText.StringResource(R.string.check_your_something)
+        else -> {
+            showLogFowUnknownError()
+            UiText.StringResource(R.string.check_your_something)
+        }
     }
 
     private fun OperationResult<String>.toReadmeState(): ReadmeState = when (this) {
         is OperationResult.Success -> {
             if (data.isBlank()) ReadmeState.Empty else ReadmeState.Loaded(data)
         }
-        is OperationResult.Failure -> ReadmeState.Error(this.toUiText())
+
+        is OperationResult.Failure -> {
+            showLogFowUnknownError()
+            ReadmeState.Error(this.toUiText())
+        }
+    }
+
+    private fun OperationResult.Failure.showLogFowUnknownError() {
+        if (this is OperationResult.Failure.Unknown) {
+            Log.d("RepositoryInfoViewModel", "error message: ${this.message}")
+        }
     }
 
     sealed interface State {
