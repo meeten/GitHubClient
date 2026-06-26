@@ -1,6 +1,7 @@
 package com.example.repo_info
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -39,7 +40,7 @@ fun RepositoryInfoScreen(
         Column(modifier = modifier.padding(paddingValues)) {
             when (val currentState = uiState.value) {
                 RepositoryInfoViewModel.State.Loading -> {
-                    Loading()
+                    Loading(modifier = Modifier.fillMaxSize())
                 }
 
                 is RepositoryInfoViewModel.State.Loaded -> {

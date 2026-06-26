@@ -1,6 +1,7 @@
 package com.example.repo_info.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +24,7 @@ fun MarkdownContent(
     Column(modifier = modifier) {
         when (readmeState) {
             is RepositoryInfoViewModel.ReadmeState.Loading -> {
-                Loading()
+                Loading(modifier = Modifier.fillMaxWidth())
             }
 
             is RepositoryInfoViewModel.ReadmeState.Empty -> {
