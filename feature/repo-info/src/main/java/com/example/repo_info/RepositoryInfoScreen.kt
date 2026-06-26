@@ -24,6 +24,8 @@ fun RepositoryInfoScreen(
     repoName: String,
     modifier: Modifier = Modifier,
     viewModel: RepositoryInfoViewModel = koinViewModel(),
+    onBackButtonPressed: () -> Unit,
+    onLogoutButtonPressed: () -> Unit
 ) {
     LaunchedEffect(repoId) {
         viewModel.setRepoId(id = repoId)
@@ -34,7 +36,11 @@ fun RepositoryInfoScreen(
 
     Scaffold(
         topBar = {
-            TopAppBarCustom(title = repoName) { }
+            TopAppBarCustom(
+                title = repoName,
+                onNavigationIconClick = onBackButtonPressed,
+                onActionButtonClick = onLogoutButtonPressed
+            )
         }
     ) { paddingValues ->
         Column(modifier = modifier.padding(paddingValues)) {

@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.authorization.AuthorizationScreen
 import com.example.designsystem.GitHubClientTheme
 import com.example.githubclient.navigation.AppNavGraph
@@ -40,7 +43,14 @@ class MainActivity : ComponentActivity() {
                     repoInfoScreen = { id, name ->
                         RepositoryInfoScreen(
                             repoId = id,
-                            repoName = name
+                            repoName = name,
+                            modifier = Modifier.padding(16.dp),
+                            onBackButtonPressed = {
+                                viewModel.onButtonPressed {
+                                    navigationState.navController.popBackStack()
+                                }
+                            },
+                            onLogoutButtonPressed = viewModel::onLogoutButtonPressed
                         )
                     }
                 )

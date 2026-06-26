@@ -13,14 +13,25 @@ import androidx.compose.ui.res.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarCustom(
-    title:String = stringResource(R.string.repositories),
+    title: String = stringResource(R.string.repositories),
     actionIcon: Painter = painterResource(R.drawable.ic_exit),
-    onClickActionButton: () -> Unit,
+    onNavigationIconClick: (() -> Unit)? = null,
+    onActionButtonClick: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(text = title) },
+        navigationIcon = {
+            if (onNavigationIconClick == null) return@TopAppBar
+
+            IconButton(onClick = onNavigationIconClick) {
+                Image(
+                    painter = painterResource(R.drawable.ic_back),
+                    contentDescription = null
+                )
+            }
+        },
         actions = {
-            IconButton(onClick = onClickActionButton) {
+            IconButton(onClick = onActionButtonClick) {
                 Image(
                     painter = actionIcon,
                     contentDescription = null
