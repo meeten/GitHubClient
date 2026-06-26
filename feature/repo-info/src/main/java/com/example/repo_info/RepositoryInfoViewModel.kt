@@ -12,12 +12,16 @@ import com.example.domain.usecase.GetRepositoryReadmeUseCase
 import com.example.ui.R
 import com.example.ui.UiText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RepositoryInfoViewModel(
@@ -26,8 +30,12 @@ class RepositoryInfoViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val uiState: StateFlow<State> = savedStateHandle.getStateFlow<Int?>(KEY_REPO_ID, null)
-        .filterNotNull()
+    private val retryTrigger = MutableSharedFlow<Unit>(replay = 1)
+
+    val uiState: StateFlow<State> = combine(
+        savedStateHandle.getStateFlow<Int?>(KEY_REPO_ID, null).filterNotNull(),
+        retryTrigger.onStart { emit(Unit) }
+    ) { id, _ -> id }
         .flatMapLatest { id ->
             flow {
                 emit(State.Loading)
@@ -44,8 +52,7 @@ class RepositoryInfoViewModel(
                 emit(State.Loaded(githubRepo = details, readmeState = ReadmeState.Loading))
 
                 val readmeResult = getRepositoryReadmeUseCase(
-                    ownerName = details.ownerName,
-                    repositoryName = details.repoName
+                    ownerName = details.ownerName, repositoryName = details.repoName
                 )
 
                 emit(State.Loaded(githubRepo = details, readmeState = readmeResult.toReadmeState()))
@@ -61,7 +68,9 @@ class RepositoryInfoViewModel(
     }
 
     fun onRetryButtonPressed() {
-        savedStateHandle[KEY_REPO_ID] = savedStateHandle.get<Int>(KEY_REPO_ID)
+        viewModelScope.launch {
+            retryTrigger.emit(Unit)
+        }
     }
 
     private fun OperationResult.Failure.toUiText(): UiText = when (this) {
@@ -75,8 +84,7 @@ class RepositoryInfoViewModel(
     private fun OperationResult<String>.toReadmeState(): ReadmeState = when (this) {
         is OperationResult.Success -> {
             val markdown = data.decodeBase64ToString()
-            if (markdown.isBlank()) ReadmeState.Empty else
-                ReadmeState.Loaded(markdown = markdown)
+            if (markdown.isBlank()) ReadmeState.Empty else ReadmeState.Loaded(markdown = markdown)
         }
 
         is OperationResult.Failure -> {
