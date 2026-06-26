@@ -8,7 +8,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.authorization.R
+import com.example.designsystem.GitHubClientTheme
+import com.example.preview.BACKGROUND_COLOR
+import com.example.preview.SHOW_BACKGROUND
 
 @Composable
 fun AuthorizationInput(
@@ -38,4 +42,34 @@ fun AuthorizationInput(
             unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     )
+}
+
+@Preview(
+    name = "empty",
+    showBackground = SHOW_BACKGROUND,
+    backgroundColor = BACKGROUND_COLOR
+)
+@Composable
+private fun AuthorizationInputEmptyPreview() {
+    GitHubClientTheme {
+        AuthorizationInput(
+            token = "",
+            errorReason = ""
+        ) { }
+    }
+}
+
+@Preview(
+    name = "error",
+    showBackground = SHOW_BACKGROUND,
+    backgroundColor = BACKGROUND_COLOR
+)
+@Composable
+private fun AuthorizationInputErrorPreview() {
+    GitHubClientTheme {
+        AuthorizationInput(
+            token = "",
+            errorReason = "Invalid token"
+        ) { }
+    }
 }
