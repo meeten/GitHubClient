@@ -14,6 +14,7 @@ import com.example.repo_info.RepositoryInfoViewModel
 import com.example.ui.Loading
 import com.example.ui.placeholder.ConnectionErrorScreen
 import com.example.ui.placeholder.UnknownErrorScreen
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun MarkdownContent(
@@ -35,7 +36,10 @@ fun MarkdownContent(
             }
 
             is RepositoryInfoViewModel.ReadmeState.Loaded -> {
-                Text(text = readmeState.markdown)
+                MarkdownText(
+                    markdown = readmeState.markdown,
+                    syntaxHighlightColor = MaterialTheme.colorScheme.outline
+                )
             }
 
             is RepositoryInfoViewModel.ReadmeState.Error -> {

@@ -1,5 +1,6 @@
 package com.example.repo_info
 
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -73,7 +74,9 @@ class RepositoryInfoViewModel(
 
     private fun OperationResult<String>.toReadmeState(): ReadmeState = when (this) {
         is OperationResult.Success -> {
-            if (data.isBlank()) ReadmeState.Empty else ReadmeState.Loaded(data)
+            val markdown = data.decodeBase64ToString()
+            if (markdown.isBlank()) ReadmeState.Empty else
+                ReadmeState.Loaded(markdown = markdown)
         }
 
         is OperationResult.Failure -> {
@@ -85,6 +88,14 @@ class RepositoryInfoViewModel(
     private fun OperationResult.Failure.showLogFowUnknownError() {
         if (this is OperationResult.Failure.Unknown) {
             Log.d("RepositoryInfoViewModel", "error message: ${this.message}")
+        }
+    }
+
+    private fun String.decodeBase64ToString(): String {
+        return try {
+            Base64.decode(this, Base64.DEFAULT).decodeToString()
+        } catch (_: Exception) {
+            ""
         }
     }
 
