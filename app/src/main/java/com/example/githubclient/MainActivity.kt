@@ -9,6 +9,7 @@ import com.example.designsystem.GitHubClientTheme
 import com.example.githubclient.navigation.AppNavGraph
 import com.example.githubclient.navigation.rememberNavigationState
 import com.example.home.HomeScreen
+import com.example.repo_info.RepositoryInfoScreen
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +33,14 @@ class MainActivity : ComponentActivity() {
                             onLogoutButtonPressed = {
                                 viewModel.onLogoutButtonPressed()
                                 navigationState.navigateToAuthorization()
-                            }
+                            },
+                            onRepoClick = navigationState::navigateToRepoInfo
+                        )
+                    },
+                    repoInfoScreen = { id, name ->
+                        RepositoryInfoScreen(
+                            repoId = id,
+                            repoName = name
                         )
                     }
                 )

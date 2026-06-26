@@ -1,5 +1,6 @@
 package com.example.home.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +10,8 @@ import com.example.domain.model.Repo
 @Composable
 fun HomeContent(
     repos: List<Repo>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRepoClick: (Int, String) -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         items(count = repos.size) {
@@ -19,7 +21,10 @@ fun HomeContent(
                 description = repo.description,
                 lang = repo.lang.name,
                 langColor = Color(repo.lang.color),
-                isLastItem = it == repos.lastIndex
+                isLastItem = it == repos.lastIndex,
+                modifier = modifier.clickable {
+                    onRepoClick(repo.id, repo.name)
+                }
             )
         }
     }

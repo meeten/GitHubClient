@@ -20,6 +20,14 @@ internal class NavigationState(val navController: NavHostController) {
         }
     }
 
+    fun navigateToRepoInfo(repoId: Int, repoName: String) {
+        val route = Screen.RepoInfo.createRouteWithArgs(
+            repoId = repoId,
+            repoName = repoName
+        )
+        navController.navigate(route)
+    }
+
     private fun NavOptionsBuilder.setting() {
         popUpTo(navController.graph.startDestinationId) {
             inclusive = true

@@ -24,7 +24,8 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onLogoutButtonPressed: () -> Unit
+    onLogoutButtonPressed: () -> Unit,
+    onRepoClick: (Int, String) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
@@ -50,7 +51,10 @@ fun HomeScreen(
                 }
 
                 is HomeViewModel.State.Loaded -> {
-                    HomeContent(repos = currentState.repos)
+                    HomeContent(
+                        repos = currentState.repos,
+                        onRepoClick = onRepoClick
+                    )
                 }
 
                 is HomeViewModel.State.Error -> {

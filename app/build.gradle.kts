@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:authorization"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:repo-info"))
 
     //koin
     implementation(libs.koin.android)
