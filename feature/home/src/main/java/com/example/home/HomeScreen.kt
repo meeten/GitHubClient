@@ -31,7 +31,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            TopAppBarCustom(onClickActionButton = onLogoutButtonPressed)
+            TopAppBarCustom(onActionButtonClick = onLogoutButtonPressed)
         }
     ) { paddingValues ->
         Column(

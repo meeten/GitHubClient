@@ -28,7 +28,7 @@ class GitHubMapper {
             ownerName = response.owner.login,
             repoName = response.name,
             url = response.url,
-            licenseName = response.license.name,
+            licenseName = response.license?.name ?: UNKNOWN_VALUE,
             stars = response.stars,
             forks = response.forks,
             watchers = response.watchers
@@ -44,6 +44,8 @@ class GitHubMapper {
     }
 
     private companion object {
+
         const val EMPTY_VALUE = ""
+        const val UNKNOWN_VALUE = "Unknown"
     }
 }

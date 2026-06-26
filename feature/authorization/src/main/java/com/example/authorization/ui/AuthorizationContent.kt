@@ -17,8 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.authorization.R
+import com.example.designsystem.GitHubClientTheme
+import com.example.preview.BACKGROUND_COLOR
+import com.example.preview.PREVIEW_PADDING
+import com.example.preview.SHOW_BACKGROUND
 import com.example.ui.Loading
 
 @Composable
@@ -53,8 +58,7 @@ internal fun AuthorizationContent(
         Button(
             onClick = onSignButtonPressed,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 8.dp),
+                .fillMaxWidth(),
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary,
@@ -69,5 +73,88 @@ internal fun AuthorizationContent(
                 Text(text = stringResource(R.string.sign_in))
             }
         }
+    }
+}
+
+@Preview(
+    name = "empty",
+    showBackground = SHOW_BACKGROUND,
+    backgroundColor = BACKGROUND_COLOR
+)
+@Composable
+private fun AuthorizationContentEmptyPreview() {
+    GitHubClientTheme {
+        AuthorizationContent(
+            token = "",
+            modifier = Modifier.padding(PREVIEW_PADDING)
+        )
+    }
+}
+
+@Preview(
+    name = "loading",
+    showBackground = SHOW_BACKGROUND,
+    backgroundColor = BACKGROUND_COLOR
+)
+@Composable
+private fun AuthorizationContentLoadingPreview() {
+    GitHubClientTheme {
+        AuthorizationContent(
+            token = "token",
+            isLoading = true,
+            modifier = Modifier.padding(PREVIEW_PADDING)
+        )
+    }
+}
+
+@Preview(
+    name = "error",
+    showBackground = SHOW_BACKGROUND,
+    backgroundColor = BACKGROUND_COLOR
+)
+@Composable
+private fun AuthorizationContentErrorPreview() {
+    GitHubClientTheme {
+        AuthorizationContent(
+            token = "token",
+            isLoading = false,
+            errorReason = "Invalid token",
+            modifier = Modifier.padding(PREVIEW_PADDING)
+        )
+    }
+}
+
+@Preview(name = "filled", showBackground = SHOW_BACKGROUND, backgroundColor = BACKGROUND_COLOR)
+@Composable
+private fun AuthorizationContentFilledPreview() {
+    GitHubClientTheme {
+        AuthorizationContent(
+            token = "ghp_exampleToken1234567890",
+            modifier = Modifier.padding(PREVIEW_PADDING)
+        )
+    }
+}
+
+@Preview(name = "loading with error", showBackground = SHOW_BACKGROUND, backgroundColor = BACKGROUND_COLOR)
+@Composable
+private fun AuthorizationContentLoadingWithErrorPreview() {
+    GitHubClientTheme {
+        AuthorizationContent(
+            token = "token",
+            isLoading = true,
+            errorReason = "Invalid token",
+            modifier = Modifier.padding(PREVIEW_PADDING)
+        )
+    }
+}
+
+@Preview(name = "long token", showBackground = SHOW_BACKGROUND, backgroundColor = BACKGROUND_COLOR)
+@Composable
+private fun AuthorizationContentLongTokenPreview() {
+    GitHubClientTheme {
+        AuthorizationContent(
+            token = "ghp_veryLongPersonalAccessTokenThatMightOverflow1234567890abcdef",
+            modifier = Modifier.padding(PREVIEW_PADDING)
+        )
     }
 }

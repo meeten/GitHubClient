@@ -1,5 +1,7 @@
 package com.example.repo_info
 
+import android.util.Base64
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,12 +12,16 @@ import com.example.domain.usecase.GetRepositoryReadmeUseCase
 import com.example.ui.R
 import com.example.ui.UiText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RepositoryInfoViewModel(
@@ -24,8 +30,12 @@ class RepositoryInfoViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val uiState: StateFlow<State> = savedStateHandle.getStateFlow<Int?>(KEY_REPO_ID, null)
-        .filterNotNull()
+    private val retryTrigger = MutableSharedFlow<Unit>(replay = 1)
+
+    val uiState: StateFlow<State> = combine(
+        savedStateHandle.getStateFlow<Int?>(KEY_REPO_ID, null).filterNotNull(),
+        retryTrigger.onStart { emit(Unit) }
+    ) { id, _ -> id }
         .flatMapLatest { id ->
             flow {
                 emit(State.Loading)
@@ -42,8 +52,7 @@ class RepositoryInfoViewModel(
                 emit(State.Loaded(githubRepo = details, readmeState = ReadmeState.Loading))
 
                 val readmeResult = getRepositoryReadmeUseCase(
-                    ownerName = details.ownerName,
-                    repositoryName = details.repoName
+                    ownerName = details.ownerName, repositoryName = details.repoName
                 )
 
                 emit(State.Loaded(githubRepo = details, readmeState = readmeResult.toReadmeState()))
@@ -58,20 +67,44 @@ class RepositoryInfoViewModel(
         savedStateHandle[KEY_REPO_ID] = id
     }
 
-    fun onRetryButtonPressed(){
-
+    fun onRetryButtonPressed() {
+        viewModelScope.launch {
+            retryTrigger.emit(Unit)
+        }
     }
 
     private fun OperationResult.Failure.toUiText(): UiText = when (this) {
         is OperationResult.Failure.NetworkError -> UiText.StringResource(R.string.network_error)
-        else -> UiText.StringResource(R.string.check_your_something)
+        else -> {
+            showLogFowUnknownError()
+            UiText.StringResource(R.string.check_your_something)
+        }
     }
 
     private fun OperationResult<String>.toReadmeState(): ReadmeState = when (this) {
         is OperationResult.Success -> {
-            if (data.isBlank()) ReadmeState.Empty else ReadmeState.Loaded(data)
+            val markdown = data.decodeBase64ToString()
+            if (markdown.isBlank()) ReadmeState.Empty else ReadmeState.Loaded(markdown = markdown)
         }
-        is OperationResult.Failure -> ReadmeState.Error(this.toUiText())
+
+        is OperationResult.Failure -> {
+            showLogFowUnknownError()
+            ReadmeState.Error(this.toUiText())
+        }
+    }
+
+    private fun OperationResult.Failure.showLogFowUnknownError() {
+        if (this is OperationResult.Failure.Unknown) {
+            Log.d("RepositoryInfoViewModel", "error message: ${this.message}")
+        }
+    }
+
+    private fun String.decodeBase64ToString(): String {
+        return try {
+            Base64.decode(this, Base64.DEFAULT).decodeToString()
+        } catch (_: Exception) {
+            ""
+        }
     }
 
     sealed interface State {

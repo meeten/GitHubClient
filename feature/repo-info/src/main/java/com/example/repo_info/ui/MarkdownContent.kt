@@ -1,6 +1,7 @@
 package com.example.repo_info.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import com.example.repo_info.RepositoryInfoViewModel
 import com.example.ui.Loading
 import com.example.ui.placeholder.ConnectionErrorScreen
 import com.example.ui.placeholder.UnknownErrorScreen
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun MarkdownContent(
@@ -23,7 +25,7 @@ fun MarkdownContent(
     Column(modifier = modifier) {
         when (readmeState) {
             is RepositoryInfoViewModel.ReadmeState.Loading -> {
-                Loading()
+                Loading(modifier = Modifier.fillMaxWidth())
             }
 
             is RepositoryInfoViewModel.ReadmeState.Empty -> {
@@ -34,7 +36,10 @@ fun MarkdownContent(
             }
 
             is RepositoryInfoViewModel.ReadmeState.Loaded -> {
-                Text(text = readmeState.markdown)
+                MarkdownText(
+                    markdown = readmeState.markdown,
+                    syntaxHighlightColor = MaterialTheme.colorScheme.outline
+                )
             }
 
             is RepositoryInfoViewModel.ReadmeState.Error -> {

@@ -14,6 +14,8 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import java.net.UnknownHostException
 
 class GitHubRemoteDataSource(
     private val networkClient: HttpClient,
@@ -63,17 +65,29 @@ class GitHubRemoteDataSource(
         ownerName: String,
         repositoryName: String
     ): OperationResult<String> {
-        return safeNetworkCall(
-            call = {
-                networkClient.get("repos/$ownerName/$repositoryName/readme") {
-                    settingHeaders(token)
+        return try {
+            val httpResponse = networkClient.get("repos/$ownerName/$repositoryName/readme") {
+                settingHeaders(token)
+            }
+
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> {
+                    OperationResult.Success(httpResponse.body<ReadmeDto>().content)
                 }
-            },
-            transform = {
-                val readmeDto = it.body<ReadmeDto>()
-                readmeDto.content
-            },
-        )
+
+                HttpStatusCode.NotFound -> {
+                    OperationResult.Success("")
+                }
+
+                else -> {
+                    OperationResult.Failure.Unknown(message = httpResponse.status.description)
+                }
+            }
+        } catch (_: UnknownHostException) {
+            OperationResult.Failure.NetworkError
+        } catch (e: Exception) {
+            OperationResult.Failure.Unknown(message = e.message ?: "Unknown error")
+        }
     }
 
     private fun HttpRequestBuilder.settingHeaders(token: String) {

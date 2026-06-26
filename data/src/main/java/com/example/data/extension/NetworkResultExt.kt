@@ -5,7 +5,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import java.net.UnknownHostException
 
-suspend fun <R> safeNetworkCall(
+suspend inline fun <R> safeNetworkCall(
     call: suspend () -> HttpResponse,
     transform: suspend (HttpResponse) -> R
 ): OperationResult<R> {
@@ -25,7 +25,7 @@ suspend fun <R> safeNetworkCall(
                 OperationResult.Failure.Unknown(message = response.status.description)
             }
         }
-    } catch (e: UnknownHostException) {
+    } catch (_: UnknownHostException) {
         OperationResult.Failure.NetworkError
     } catch (e: Exception) {
         OperationResult.Failure.Unknown(message = e.message ?: "Unknown error")
