@@ -3,7 +3,7 @@ package com.example.storage
 import android.content.Context
 import androidx.core.content.edit
 
-class TokenManagerImpl(context: Context) : TokenManager {
+class KeyValueStorageImpl(context: Context) : KeyValueStorage {
 
     private val sharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

@@ -1,6 +1,6 @@
 package com.example.storage
 
-interface TokenManager {
+interface KeyValueStorage {
 
     fun saveToken(token: String)
 

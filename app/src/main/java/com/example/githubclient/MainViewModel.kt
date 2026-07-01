@@ -3,7 +3,7 @@ package com.example.githubclient
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubclient.navigation.Screen
-import com.example.storage.TokenManager
+import com.example.storage.KeyValueStorage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -23,7 +23,7 @@ import kotlinx.coroutines.sync.withLock
  * @see onButtonPressed обрабатывает клики с защитой от дребезга
  */
 class MainViewModel(
-    private val tokenManager: TokenManager
+    private val tokenManager: KeyValueStorage
 ) : ViewModel() {
 
     private val clickMutex = Mutex(false)

@@ -5,11 +5,11 @@ import com.example.domain.model.OperationResult
 import com.example.domain.model.Repo
 import com.example.domain.model.RepoDetails
 import com.example.domain.repository.GitHubRepository
-import com.example.storage.TokenManager
+import com.example.storage.KeyValueStorage
 
 class GitHubRepositoryImpl(
     private val remoteDataSource: GitHubRemoteDataSource,
-    private val tokenManager: TokenManager
+    private val tokenManager: KeyValueStorage
 ) : GitHubRepository {
 
     private var token: String = tokenManager.getToken() ?: ""
