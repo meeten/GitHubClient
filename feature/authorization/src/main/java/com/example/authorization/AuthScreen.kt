@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AuthorizationScreen(
+fun AuthScreen(
     modifier: Modifier = Modifier,
-    viewModel: AuthorizationViewModel = koinViewModel(),
+    viewModel: AuthViewModel = koinViewModel(),
     onAuthorized: () -> Unit
 ) {
     val context = LocalContext.current
@@ -32,13 +32,13 @@ fun AuthorizationScreen(
     LaunchedEffect(viewModel.actions) {
         viewModel.actions.collectLatest { action ->
             when (action) {
-                AuthorizationViewModel.Action.Authorized -> {
+                AuthViewModel.Action.Authorized -> {
                     onAuthorized()
                 }
 
                 // TODO: Заменить Snackbar на AlertDialog в соответствии с дизайн-макетом
                 //  для детальных ошибок
-                is AuthorizationViewModel.Action.ShowError -> {
+                is AuthViewModel.Action.ShowError -> {
                     val errorMessage = action.messageUiText.asString(context)
 
                     snackbarHostState.currentSnackbarData?.dismiss()

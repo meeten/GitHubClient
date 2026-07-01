@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.authorization.AuthorizationScreen
+import com.example.authorization.AuthScreen
 import com.example.designsystem.GitHubClientTheme
 import com.example.githubclient.navigation.AppNavGraph
 import com.example.githubclient.navigation.rememberNavigationState
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     navController = navigationState.navController,
                     startDestination = viewModel.getStartDestination(),
                     authorizationScreen = {
-                        AuthorizationScreen(onAuthorized = navigationState::navigateToHome)
+                        AuthScreen(onAuthorized = navigationState::navigateToHome)
                     },
                     homeScreen = {
                         HomeScreen(

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class AuthorizationViewModel(
+class AuthViewModel(
     private val validateTokenUseCase: ValidateTokenUseCase
 ) : ViewModel() {
 
